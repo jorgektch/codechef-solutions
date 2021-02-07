@@ -1,63 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
-struct Word{
-    char first;
-    vector<string> ends = vector<string>();
-};
+int num_distincts(vector<char> v1, vector<char> v2){
+    vector<char> v3;
+    vector<char> v1_c = v1;
+    vector<char> v2_c = v2;
+    sort(v1_c.begin(), v1_c.end());
+    sort(v2_c.begin(), v2_c.end());
+    set_intersection(v1_c.begin(),v1_c.end(), v2_c.begin(),v2_c.end(), back_inserter(v3));
+    return v1_c.size()+v2_c.size()-v3.size();
+}
 int main(int argc, char** argv){
     int t; cin>>t;
     for(int c=0; c<t; c++){
         int n; cin >> n;
-        vector<Word> words = vector<Word>();
-        string cad;
+        vector<string> words_vector;
+        map<string, vector<char>> words_map;
+        map<string, int> keys_map;
         for(int i=0; i<n; i++){
-            cin >> cad;
-            if(words.size() == 0){
-                Word w;
-                w.first = cad[0];
-                w.ends.push_back(cad.substr(1,cad.length()-1));
-                words.push_back(w);
-            }else{
-                bool exist = false;
-                for(int j=0; j<words.size(); j++){
-                    if(words[j].first == cad[0]){
-                        words[j].ends.push_back(cad.substr(1,cad.length()-1));
-                        exist = true;
-                    }
-                }
-                if(!exist){
-                    Word w;
-                    w.first = cad[0];
-                    w.ends.push_back(cad.substr(1,cad.length()-1));
-                    words.push_back(w);
-                }
-            }
+            string cad; cin >> cad;
+            char cad_0 = cad[0];
+            string cad_rest = cad.substr(1,cad.length()-1);
+            keys_map[cad_rest] == true;
+            words_map[cad_rest].push_back(cad_0);
         }
-        /*
-        for(int i=0; i<words.size(); i++){
-            cout << words[i].first << " ";
-            for(int j=0; j<words[i].ends.size(); j++){
-                cout << words[i].ends[j] <<" ";
-            }
-            cout << "\n";
-        }
-        */
-        
         int count = 0;
-        for(int i=0; i<words.size()-1; i++){
-            for(int j=i+1; j<words.size(); j++){
-                for(int k=0; k<words[i].ends.size(); k++){
-                    for(int l=0; l<words[j].ends.size(); l++){
-                        if(words[i].ends[k] != words[j].ends[l]){
-                            count++;
-                        }
-                    }
+        for (auto it = words_map.begin(); it != words_map.end(); it++){
+            for (auto jt = it ; jt != words_map.end(); jt++){
+                if(it->first != jt->first){
+                    int distincts = num_distincts(it->second, jt->second);
+                    count += (it->second.size()-distincts)*(jt->second.size()-distincts);
                 }
             }
         }
-        cout << count << endl;
-        
-        
+        cout << 2*count << "\n";
     }
     return 0;
 }
