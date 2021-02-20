@@ -3,6 +3,15 @@ using namespace std;
 char nth_letter(int n){
     return "abcdefghijklmnopqrstuvwxyz"[n-1];
 }
+string str_out_gen(map<char, long long int> freq){
+    string str_out = "";
+    for(int i=1; i<=26; i++){
+        for(int j=0; j<freq[nth_letter(i)]; j++){
+            str_out += nth_letter(i);
+        }
+    }
+    return str_out;
+}
 int main(){
     string id; cin >> id;
     map<char, long long int> freq;
@@ -27,43 +36,24 @@ int main(){
             freq_min = itr->first;
     }
 
-    string str_out;
     if(map_freq.size()>2){
         cout << "The string is invalid\n";
     }else{
         if(map_freq.size()==1){
-            str_out = "";
-            for(int i=1; i<=26; i++){
-                for(int j=0; j<freq[nth_letter(i)]; j++){
-                    str_out += nth_letter(i);
-                }
-            }
-            cout << str_out << "\n";
+            cout << str_out_gen(freq) << "\n";
         }else{
             if(map_freq.size()==2){
                 if(map_freq[freq_max]==1 && freq_max-freq_min==1){
                     for(int i=1; i<=26; i++)
                         if(freq[nth_letter(i)]==freq_max)
                             freq[nth_letter(i)]--;
-                    str_out = "";
-                    for(int i=1; i<=26; i++){
-                        for(int j=0; j<freq[nth_letter(i)]; j++){
-                            str_out += nth_letter(i);
-                        }
-                    }
-                    cout << str_out << "\n";
+                    cout << str_out_gen(freq) << "\n";
                 }else{
                     if(map_freq[freq_min]==1 && freq_min==1){
                         for(int i=1; i<=26; i++)
                             if(freq[nth_letter(i)]==freq_min)
                                 freq[nth_letter(i)]--;
-                        str_out = "";
-                        for(int i=1; i<=26; i++){
-                            for(int j=0; j<freq[nth_letter(i)]; j++){
-                                str_out += nth_letter(i);
-                            }
-                        }
-                        cout << str_out << "\n";
+                        cout << str_out_gen(freq) << "\n";
                     }else{
                         cout << "The string is invalid\n";
                     }
